@@ -2,6 +2,7 @@
 #include "Log.h"
 #include <NTPClient.h>
 #include <WiFiUdp.h>
+#define DEBUG
 
 Log::Log(NTPClient *timeClient)
 {
@@ -18,4 +19,12 @@ void Log::I(String TAG, String logMessage)
 {
   timeClient->update();
   Serial.println(timeClient->getFormattedTime() + " I " + TAG + ": " + logMessage);
+}
+
+void Log::D(String TAG, String logMessage)
+{
+  timeClient->update();
+  #ifdef DEBUG
+    Serial.println(timeClient->getFormattedTime() + " D " + TAG + ": " + logMessage);
+  #endif
 }

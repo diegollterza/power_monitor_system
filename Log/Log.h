@@ -3,6 +3,7 @@
 
 #include "Arduino.h"
 #include <NTPClient.h>
+#include "debug.h"
 
 class Log
 {
@@ -10,6 +11,7 @@ class Log
     Log(NTPClient *timeClient);
     void E(String TAG, String logMessage);
     void I(String TAG, String logMessage);
+    void D(String TAG, String logMessage);
   private:
     NTPClient *timeClient;
 };

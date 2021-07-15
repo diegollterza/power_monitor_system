@@ -12,6 +12,8 @@ Wifi::Wifi(WiFiClient *espClient, Log *LOG)
   this->LOG = LOG;
   this->TAG = "Wifi";
   this->max_try = 50; //5 seconds max try
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH);
 }
 
 Wifi::Wifi(String ssid, String password, int max_try, WiFiClient *espClient, Log *LOG)
@@ -22,6 +24,8 @@ Wifi::Wifi(String ssid, String password, int max_try, WiFiClient *espClient, Log
   this->LOG = LOG;
   this->TAG = "Wifi";
   this->max_try = max_try;
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH);
 }
 
 
@@ -43,12 +47,14 @@ bool Wifi::connect(){
   }
   LOG->I(TAG, "Connected succesfully to SSID: " + ssid);
   LOG->I(TAG, "Connection info: IP=" + WiFi.localIP().toString());
+  digitalWrite(LED_BUILTIN, LOW);
   return true;
 }
 
 void Wifi::disconnect(){
   WiFi.disconnect();
   LOG->I(TAG, "Disconnected from SSID:" + ssid);
+  digitalWrite(LED_BUILTIN, HIGH);
 }
 
 void Wifi::setNetworkParameters(String ssid, String password){

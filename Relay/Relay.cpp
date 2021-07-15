@@ -1,6 +1,7 @@
 #include "Arduino.h"
 #include "Relay.h"
 #include "Log.h"
+#include "debug.h"
 
 Relay::Relay(int pin, Log *LOG){
   pinMode(pin, OUTPUT);
