@@ -1,7 +1,15 @@
 #include "Arduino.h"
 #include "Relay.h"
 #include "Log.h"
-#include "debug.h"
+
+Relay::Relay(Log *LOG){
+  pinMode(0, OUTPUT);
+  digitalWrite(0, LOW);
+  this->pin = 0;
+  this->LOG = LOG;
+  this->TAG = "Relay";
+  this->is_on = false;
+}
 
 Relay::Relay(int pin, Log *LOG){
   pinMode(pin, OUTPUT);
@@ -20,7 +28,7 @@ void Relay::turnOn(){
 
 void Relay::turnOff(){
   is_on = false;
-  digitalWrite(pin, HIGH);
+  digitalWrite(pin, LOW);
   LOG->I(TAG, "Relay turned off");
 }
 

@@ -53,19 +53,29 @@ bool Wifi::connect(){
 
 void Wifi::disconnect(){
   WiFi.disconnect();
-  LOG->I(TAG, "Disconnected from SSID:" + ssid);
+  LOG->I(TAG, "Disconnected from ssid:" + ssid);
   digitalWrite(LED_BUILTIN, HIGH);
 }
 
 void Wifi::setNetworkParameters(String ssid, String password){
-  String old_ssid = this->ssid;
   this->ssid = ssid;
   this->password = password;
-  LOG->I(TAG, "Set new parameters: old_SSID: " + old_ssid + " new_SSID: " + ssid);
+  LOG->I(TAG, "Set network parameters with ssid: " + ssid);
 }
 
 bool Wifi::isConnected(){
   bool isConn = WiFi.isConnected();
   LOG->I(TAG, "Is connected: " + String(isConn));
   return isConn;
+}
+
+void Wifi::setSsid(String ssid){
+  String old_ssid = this->ssid;
+  this->ssid = ssid;
+  LOG->I(TAG, "Set ssid:" + ssid);
+}
+
+void Wifi::setPassword(String password){
+  this->password =password;
+  LOG->I(TAG, "Set password");
 }

@@ -8,7 +8,8 @@
 class Relay
 {
   public:
-   Relay(int pin, Log *LOG);
+    Relay(Log *LOG);
+    Relay(int pin, Log *LOG);
     void turnOn();
     void turnOff();
     bool isOn();

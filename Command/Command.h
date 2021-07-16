@@ -5,12 +5,13 @@
 #include "Log.h"
 #include "Wifi.h"
 #include "Wifidata.h"
+#include "Relay.h"
 
 class Command
 {
   public:
-   Command(Wifi *wifi, WifiData *wifidata, Log *LOG);
-   Command(int max_command_size, Wifi *wifi, WifiData *wifidata, Log *LOG);
+   Command(Relay *relay, Wifi *wifi, WifiData *wifidata, Log *LOG);
+   Command(int max_command_size, Relay *relay, Wifi *wifi, WifiData *wifidata, Log *LOG);
    bool readCommand();
   private:
     bool executeCommand();
@@ -21,6 +22,7 @@ class Command
     Log *LOG;
     Wifi *wifi;
     WifiData *wifidata;
+    Relay *relay;
 };
 
 #endif

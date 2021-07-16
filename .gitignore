@@ -3,3 +3,4 @@ NTPClient/*
 pubsub/*
 pubsubclient-master/*
 readme.txt
+.vscode/*

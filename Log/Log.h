@@ -9,6 +9,7 @@ class Log
 {
   public:
     Log(NTPClient *timeClient);
+    Log(int baud_rate, NTPClient *timeClient);
     void E(String TAG, String logMessage);
     void I(String TAG, String logMessage);
     void D(String TAG, String logMessage);

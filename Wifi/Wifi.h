@@ -9,11 +9,13 @@
 class Wifi
 {
   public:
-   Wifi(WiFiClient *espClient, Log *LOG);
-   Wifi(String ssid, String password, int max_try, WiFiClient *espClient, Log *LOG);
+    Wifi(WiFiClient *espClient, Log *LOG);
+    Wifi(String ssid, String password, int max_try, WiFiClient *espClient, Log *LOG);
     bool connect();
     void disconnect();
     void setNetworkParameters(String ssid, String password);
+    void setSsid(String ssid);
+    void setPassword(String password);
     bool isConnected();
   private:
     String ssid;
