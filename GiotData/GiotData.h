@@ -20,16 +20,16 @@ class GiotData {
   String getSavedDeviceId();
 
  private:
-  String str_ca;
+  char c_ca[2048];
   static const inline String TAG = "GiotData";
-  Log *LOG;
   static const inline int int_ca_buffer_size =
       2048;  // maximum ssl certificate size
   static const inline int int_project_info_buffer_size =
       128;  // maximum project info size
-  String str_project_id;
-  String str_location;
-  String str_registry_id;
-  String str_device_id;
+  char c_project_id[128];
+  char c_location[128];
+  char c_registry_id[128];
+  char c_device_id[128];
+  Log *LOG;
 };
 #endif

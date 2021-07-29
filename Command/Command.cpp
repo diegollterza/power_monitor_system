@@ -4,26 +4,18 @@
 #include <Relay.h>
 #include <Wifi.h>
 #include <WifiData.h>
+#include <GiotData.h>
 
-Command::Command(Relay* relay, Wifi* wifi, WifiData* wifidata, Log* LOG) {
+Command::Command(GiotData* gdata, Relay* relay, Wifi* wifi, WifiData* wifidata, Log *LOG) {
   str_command = "";
   str_parameters = "";
-  this->LOG = LOG;
+  str_ca = "";
   this->relay = relay;
   this->wifi = wifi;
   this->wifidata = wifidata;
-  int_max_command_size = 128;  // default command size
-}
-
-Command::Command(int max_command_size, Relay* relay, Wifi* wifi,
-                 WifiData* wifidata, Log* LOG) {
-  str_command = "";
-  str_parameters = "";
+  this->gdata = gdata;
   this->LOG = LOG;
-  this->relay = relay;
-  this->wifi = wifi;
-  this->wifidata = wifidata;
-  int_max_command_size = max_command_size;
+  LOG->I(TAG, "Command initialized");
 }
 
 bool Command::readCommand() {
@@ -47,19 +39,25 @@ bool Command::executeCommand() {
     }
   } else if (str_command == "disconnect") {
     wifi->disconnect();
-    LOG->I(TAG, "disconnected to wifi by command");
+    LOG->I(TAG, "disconnected to wifi");
   } else if (str_command == "setssid") {
     wifi->setSsid(str_parameters);
-    LOG->I(TAG, "ssid changed by command");
+    LOG->I(TAG, "ssid changed");
   } else if (str_command == "setpassword") {
     wifi->setPassword(str_parameters);
-    LOG->I(TAG, "password changed by command");
+    LOG->I(TAG, "password changed");
   } else if (str_command == "relayon") {
     relay->turnOn();
-    LOG->I(TAG, "relay turned on by command");
+    LOG->I(TAG, "relay turned on");
   } else if (str_command == "relayoff") {
     relay->turnOff();
-    LOG->I(TAG, "relay turned off by command");
+    LOG->I(TAG, "relay turned off");
+  } else if (str_command == "saveca") {
+    str_ca = str_ca + str_parameters;
+    LOG->I(TAG, "received line of ssl certificate: " + str_parameters);
+  } else if (str_command == "commitca") {
+    gdata->saveCa(str_ca);
+    LOG->I(TAG, "saved google ssl certificate:\n" + str_ca);
   } else {
     b_success = false;
   }
