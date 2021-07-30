@@ -7,7 +7,7 @@
 
 class GiotData {
  public:
-  GiotData(Log *LOG);
+  GiotData();
   void saveCa(String ca);
   void saveProjectId(String project_id);
   void saveLocation(String location);
@@ -30,6 +30,6 @@ class GiotData {
   char c_location[128];
   char c_registry_id[128];
   char c_device_id[128];
-  Log *LOG;
+  static inline Log *LOG = Log::getInstance();
 };
 #endif

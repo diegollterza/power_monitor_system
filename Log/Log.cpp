@@ -5,16 +5,12 @@
 #include <WiFiUdp.h>
 #define DEBUG  // Can't define DEBUG on other libraries, need to define it here
 
-Log::Log(NTPClient *timeClient) {
+Log::Log() {
   Serial.begin(115200);
-  this->timeClient = timeClient;
+  udp = new WiFiUDP();
+  this->timeClient = new NTPClient(*udp, "pool.ntp.org", -10800);
   Serial.println(timeClient->getFormattedTime() + " I " + this->TAG + ": " +
                  "Log system initialized");
-}
-
-Log::Log(int baud_rate, NTPClient *timeClient) {
-  Serial.begin(baud_rate);
-  this->timeClient = timeClient;
 }
 
 void Log::E(String TAG, String logMessage) {
@@ -35,4 +31,13 @@ void Log::D(String TAG, String logMessage) {
   Serial.println(timeClient->getFormattedTime() + " D " + TAG + ": " +
                  logMessage);
 #endif
+}
+
+Log* Log::instance = 0;
+
+Log* Log::getInstance() {
+  if (instance == 0) {
+    instance = new Log();
+  }
+  return instance;
 }

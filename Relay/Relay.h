@@ -6,8 +6,8 @@
 
 class Relay {
  public:
-  Relay(Log *LOG);
-  Relay(int pin, Log *LOG);
+  Relay();
+  Relay(int pin);
   void turnOn();
   void turnOff();
   bool isOn();
@@ -15,7 +15,7 @@ class Relay {
  private:
   int pin;
   static const inline String TAG = "Relay";
-  Log *LOG;
+  static inline Log *LOG = Log::getInstance();
   bool is_on;
 };
 

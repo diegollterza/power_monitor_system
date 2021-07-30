@@ -5,7 +5,7 @@
 #include "Arduino.h"
 #include "Log.h"
 
-WifiData::WifiData(Log *LOG) {
+WifiData::WifiData() {
   EEPROM.begin(2 * buffer_size);
   char ssid_ch[buffer_size];
   char pass_ch[buffer_size];
@@ -15,7 +15,6 @@ WifiData::WifiData(Log *LOG) {
   }
   this->ssid = String(ssid_ch);
   this->password = String(pass_ch);
-  this->LOG = LOG;
   EEPROM.end();
 }
 

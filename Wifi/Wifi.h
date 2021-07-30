@@ -9,9 +9,8 @@
 
 class Wifi {
  public:
-  Wifi(WiFiClient *espClient, Log *LOG);
-  Wifi(String ssid, String password, int max_try, WiFiClient *espClient,
-       Log *LOG);
+  Wifi(WiFiClient *espClient);
+  Wifi(String ssid, String password, int max_try, WiFiClient *espClient);
   bool connect();
   void disconnect();
   void setNetworkParameters(String ssid, String password);
@@ -23,7 +22,7 @@ class Wifi {
   String ssid;
   String password;
   static const inline String TAG = "Wifi";
-  Log *LOG;
+  static inline Log *LOG = Log::getInstance();
   WiFiClient *espClient;
   int max_try;
 };

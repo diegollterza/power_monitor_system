@@ -3,8 +3,7 @@
 #include <EEPROM.h>
 #include <Log.h>
 
-DataManager::DataManager(Log *LOG) {
-  this->LOG = LOG;
+DataManager::DataManager() {
   LOG->I(TAG, "DataManager initialized");
 }
 

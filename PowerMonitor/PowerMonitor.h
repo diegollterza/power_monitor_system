@@ -7,8 +7,8 @@
 
 class PowerMonitor {
  public:
-  PowerMonitor(Log *LOG, EnergyMonitor *monitor);
-  PowerMonitor(int pin, int resistor, int a_voltage, int out_current, Log *LOG, EnergyMonitor *monitor);
+  PowerMonitor(EnergyMonitor *monitor);
+  PowerMonitor(int pin, int resistor, int a_voltage, int out_current, EnergyMonitor *monitor);
   double readPower();
 
  private:
@@ -17,8 +17,8 @@ class PowerMonitor {
   int a_voltage;
   float out_current;
   static const inline String TAG = "PowerMonitor";
-  Log *LOG;
   EnergyMonitor *monitor;
+  static inline Log *LOG = Log::getInstance();
 };
 
 #endif

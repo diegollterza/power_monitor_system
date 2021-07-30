@@ -3,9 +3,8 @@
 #include <GiotData.h>
 #include <Log.h>
 
-GiotData::GiotData(Log *LOG) {
+GiotData::GiotData() {
   EEPROM.begin(16 * 1024);
-  this->LOG = LOG;
   int i = 0, j;
   while (i < int_ca_buffer_size) {
     j = i + 1024;  // ca is saved at position 1024 of EEPROM

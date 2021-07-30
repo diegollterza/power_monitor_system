@@ -10,7 +10,7 @@
 
 class Command {
  public:
-  Command(GiotData *gdata, Relay *relay, Wifi *wifi, WifiData *wifidata, Log *LOG);
+  Command(GiotData *gdata, Relay *relay, Wifi *wifi, WifiData *wifidata);
   bool readCommand();
 
  private:
@@ -20,7 +20,7 @@ class Command {
   String str_ca;
   static const inline String TAG = "Command";
   int int_max_command_size;
-  Log *LOG;
+  static inline Log *LOG = Log::getInstance();
   Wifi *wifi;
   WifiData *wifidata;
   Relay *relay;

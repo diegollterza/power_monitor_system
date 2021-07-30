@@ -3,19 +3,17 @@
 #include "Arduino.h"
 #include "Log.h"
 
-Relay::Relay(Log *LOG) {
+Relay::Relay() {
   pinMode(0, OUTPUT);
   digitalWrite(0, LOW);
   this->pin = 0;
-  this->LOG = LOG;
   this->is_on = false;
 }
 
-Relay::Relay(int pin, Log *LOG) {
+Relay::Relay(int pin) {
   pinMode(pin, OUTPUT);
   digitalWrite(pin, LOW);
   this->pin = pin;
-  this->LOG = LOG;
   this->is_on = false;
 }
 

@@ -6,22 +6,19 @@
 #include "Arduino.h"
 #include "Log.h"
 
-Wifi::Wifi(WiFiClient *espClient, Log *LOG) {
+Wifi::Wifi(WiFiClient *espClient) {
   this->ssid = "";
   this->password = "";
   this->espClient = espClient;
-  this->LOG = LOG;
   this->max_try = 50;  // 5 seconds max try
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
 }
 
-Wifi::Wifi(String ssid, String password, int max_try, WiFiClient *espClient,
-           Log *LOG) {
+Wifi::Wifi(String ssid, String password, int max_try, WiFiClient *espClient) {
   this->ssid = ssid;
   this->password = password;
   this->espClient = espClient;
-  this->LOG = LOG;
   this->max_try = max_try;
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);

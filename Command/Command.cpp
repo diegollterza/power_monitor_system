@@ -6,7 +6,7 @@
 #include <WifiData.h>
 #include <GiotData.h>
 
-Command::Command(GiotData* gdata, Relay* relay, Wifi* wifi, WifiData* wifidata, Log *LOG) {
+Command::Command(GiotData* gdata, Relay* relay, Wifi* wifi, WifiData* wifidata) {
   str_command = "";
   str_parameters = "";
   str_ca = "";

@@ -8,7 +8,7 @@
 
 class WifiData {
  public:
-  WifiData(Log *LOG);
+  WifiData();
   String getSavedSsid();
   String getSavedPassword();
   void saveSsid(String ssid);
@@ -18,7 +18,7 @@ class WifiData {
   String ssid;
   String password;
   static const inline String TAG = "WifiData";
-  Log *LOG;
+  static inline Log *LOG = Log::getInstance();
   static const inline int buffer_size = 128;  // fixed buffer size of 128 bytes
 };
 
