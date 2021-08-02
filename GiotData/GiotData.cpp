@@ -1,7 +1,4 @@
-#include <Arduino.h>
-#include <EEPROM.h>
 #include <GiotData.h>
-#include <Log.h>
 
 GiotData::GiotData() {
   EEPROM.begin(16 * 1024);
@@ -49,8 +46,7 @@ void GiotData::saveProjectId(String project_id) {
 void GiotData::saveLocation(String location) {
   EEPROM.begin(16 * 1024);
   for (int i = 0; i <= location.length(); i++) {
-    EEPROM.write(i + 1024 + 2048 + int_project_info_buffer_size,
-                 location[i]);
+    EEPROM.write(i + 1024 + 2048 + int_project_info_buffer_size, location[i]);
     EEPROM.commit();
     if (i == int_project_info_buffer_size) break;
   }
@@ -74,7 +70,7 @@ void GiotData::saveRegistryId(String registry_id) {
 void GiotData::saveDeviceId(String device_id) {
   EEPROM.begin(16 * 1024);
   for (int i = 0; i <= device_id.length(); i++) {
-     if (i == int_project_info_buffer_size) break;
+    if (i == int_project_info_buffer_size) break;
     EEPROM.write(i + 1024 + 2048 + 3 * int_project_info_buffer_size,
                  device_id[i]);
     EEPROM.commit();
@@ -147,4 +143,11 @@ String GiotData::getSavedDeviceId() {
   LOG->I(TAG, "Retrieving saved project id: " + str_device_id);
   EEPROM.end();
   return str_device_id;
+}
+
+GiotData* GiotData::instance = 0;
+
+GiotData* GiotData::getInstance() {
+  if (!instance) instance = new GiotData();
+  return instance;
 }

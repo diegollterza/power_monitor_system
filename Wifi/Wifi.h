@@ -9,16 +9,17 @@
 
 class Wifi {
  public:
-  Wifi(WiFiClient *espClient);
-  Wifi(String ssid, String password, int max_try, WiFiClient *espClient);
   bool connect();
   void disconnect();
   void setNetworkParameters(String ssid, String password);
   void setSsid(String ssid);
   void setPassword(String password);
   bool isConnected();
+  static Wifi *getInstance();
 
  private:
+  Wifi();
+  static Wifi *instance;
   String ssid;
   String password;
   static const inline String TAG = "Wifi";

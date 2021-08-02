@@ -1,27 +1,13 @@
-#include "Wifi.h"
+#include <Wifi.h>
 
-#include <ESP8266WiFi.h>
-#include <WiFiUdp.h>
-
-#include "Arduino.h"
-#include "Log.h"
-
-Wifi::Wifi(WiFiClient *espClient) {
-  this->ssid = "";
-  this->password = "";
-  this->espClient = espClient;
+Wifi::Wifi() {
+  ssid = "";
+  password = "";
+  espClient = new WiFiClient();
   this->max_try = 50;  // 5 seconds max try
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
-}
-
-Wifi::Wifi(String ssid, String password, int max_try, WiFiClient *espClient) {
-  this->ssid = ssid;
-  this->password = password;
-  this->espClient = espClient;
-  this->max_try = max_try;
-  pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, HIGH);
+  LOG->I(TAG, "Wifi initialized");
 }
 
 bool Wifi::connect() {
@@ -41,7 +27,8 @@ bool Wifi::connect() {
     }
   }
   LOG->I(TAG, "Connected succesfully to SSID: " + ssid);
-  LOG->I(TAG, "Connection info: IP=" + WiFi.localIP().toString() + " rssi=" + WiFi.RSSI());
+  LOG->I(TAG, "Connection info: IP=" + WiFi.localIP().toString() +
+                  " rssi=" + WiFi.RSSI());
   digitalWrite(LED_BUILTIN, LOW);
   return true;
 }
@@ -73,4 +60,13 @@ void Wifi::setSsid(String ssid) {
 void Wifi::setPassword(String password) {
   this->password = password;
   LOG->I(TAG, "Set password");
+}
+
+Wifi* Wifi::instance = 0;
+
+Wifi* Wifi::getInstance() {
+  if (instance == 0) {
+    instance = new Wifi();
+  }
+  return instance;
 }

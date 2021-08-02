@@ -7,7 +7,7 @@
 
 class GiotData {
  public:
-  GiotData();
+  static GiotData *getInstance();
   void saveCa(String ca);
   void saveProjectId(String project_id);
   void saveLocation(String location);
@@ -20,6 +20,7 @@ class GiotData {
   String getSavedDeviceId();
 
  private:
+  GiotData();
   char c_ca[2048];
   static const inline String TAG = "GiotData";
   static const inline int int_ca_buffer_size =
@@ -31,5 +32,6 @@ class GiotData {
   char c_registry_id[128];
   char c_device_id[128];
   static inline Log *LOG = Log::getInstance();
+  static GiotData *instance;
 };
 #endif

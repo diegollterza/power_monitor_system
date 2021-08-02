@@ -1,21 +1,11 @@
-#include <Arduino.h>
 #include <Command.h>
-#include <Log.h>
-#include <Relay.h>
-#include <Wifi.h>
-#include <WifiData.h>
-#include <GiotData.h>
 
-Command::Command(GiotData* gdata, Relay* relay, Wifi* wifi, WifiData* wifidata) {
+Command::Command() {
   str_command = "";
   str_parameters = "";
   str_ca = "";
-  this->relay = relay;
-  this->wifi = wifi;
-  this->wifidata = wifidata;
-  this->gdata = gdata;
-  this->LOG = LOG;
   LOG->I(TAG, "Command initialized");
+  int_max_command_size = 128;
 }
 
 bool Command::readCommand() {
@@ -71,4 +61,11 @@ bool Command::executeCommand() {
   // Reset the command strings (to avoid errors)
   str_command = "";
   str_parameters = "";
+}
+
+Command* Command::instance = 0;
+
+Command* Command::getInstance(){
+  if(!instance) instance = new Command();
+  return instance;
 }

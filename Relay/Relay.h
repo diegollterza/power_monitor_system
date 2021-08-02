@@ -6,17 +6,19 @@
 
 class Relay {
  public:
-  Relay();
-  Relay(int pin);
+  static Relay *getInstance();
+  void setPin(int pin);
   void turnOn();
   void turnOff();
   bool isOn();
 
  private:
-  int pin;
+  Relay();
+  int int_pin;
+  static Relay *instance;
   static const inline String TAG = "Relay";
   static inline Log *LOG = Log::getInstance();
-  bool is_on;
+  bool b_is_on;
 };
 
 #endif
