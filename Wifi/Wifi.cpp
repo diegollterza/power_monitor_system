@@ -1,8 +1,8 @@
 #include <Wifi.h>
 
 Wifi::Wifi() {
-  ssid = "";
-  password = "";
+  ssid = wifidata->getSavedSsid();
+  password = wifidata->getSavedPassword();
   espClient = new WiFiClient();
   this->max_try = 50;  // 5 seconds max try
   pinMode(LED_BUILTIN, OUTPUT);
@@ -17,7 +17,7 @@ bool Wifi::connect() {
 
   WiFi.begin(ssid, password);
   int i = 0;
-  LOG->I(TAG, "Trying to connect to SSID:" + ssid);
+  LOG->I(TAG, "Trying to connect to SSID: " + ssid);
   while (WiFi.status() != WL_CONNECTED) {
     delay(100);
     i++;
@@ -39,11 +39,6 @@ void Wifi::disconnect() {
   digitalWrite(LED_BUILTIN, HIGH);
 }
 
-void Wifi::setNetworkParameters(String ssid, String password) {
-  this->ssid = ssid;
-  this->password = password;
-  LOG->I(TAG, "Set network parameters with ssid: " + ssid);
-}
 
 bool Wifi::isConnected() {
   bool isConn = WiFi.isConnected();
@@ -55,11 +50,14 @@ void Wifi::setSsid(String ssid) {
   String old_ssid = this->ssid;
   this->ssid = ssid;
   LOG->I(TAG, "Set ssid:" + ssid);
+  wifidata->saveSsid(ssid);
 }
 
 void Wifi::setPassword(String password) {
   this->password = password;
   LOG->I(TAG, "Set password");
+  LOG->D(TAG, "Password set to " + password);
+  wifidata->savePassword(password);
 }
 
 Wifi* Wifi::instance = 0;
