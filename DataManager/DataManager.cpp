@@ -6,31 +6,33 @@
 DataManager::DataManager() { LOG->I(TAG, "DataManager initialized"); }
 
 void DataManager::saveData(int offset, int max_size, char *data) {
-  EEPROM.begin(offset + max_size);
+  EEPROM.begin(10 * 1024);
   int i = 0;
   while (i < max_size) {
-    EEPROM.write(offset + max_size, data[i]);
+    EEPROM.write(offset + i, data[i]);
     i++;
   }
-  EEPROM.end();
-  LOG->I(TAG, "Saved data in EEPROM at position " + String(offset) +
+  EEPROM.write(offset + i + 1, '\0');
+  EEPROM.commit();
+  LOG->D(TAG, "Saved data in EEPROM at position " + String(offset) +
                   " with max size of " + String(max_size));
   LOG->D(TAG, "Data saved: " + String(data));
+  EEPROM.end();
 }
 
-char *DataManager::readData(int offset, int max_size) {
-  EEPROM.begin(offset + max_size);
+void DataManager::readData(int offset, int max_size, char *buffer) {
+  EEPROM.begin(10 * 1024);
   int i = 0;
-  char c_data[max_size];
-  while (i < max_size) {
-    c_data[i] = EEPROM.read(offset + i);
+  char c = 'a';
+  while (i < max_size && c != '\0') {
+    c = EEPROM.read(offset + i);
+    buffer[i] = c;
     i++;
   }
+  LOG->D(TAG, "Read data in EEPROM at position " + String(offset) +
+                  " with max size of " + String(max_size) +
+                  " data read: " + String(buffer));
   EEPROM.end();
-  LOG->I(TAG, "Read data in EEPROM at position " + String(offset) +
-                  "with max size of " + String(max_size) +
-                  "data read: " + String(c_data));
-  return c_data;
 }
 
 DataManager *DataManager::instance = 0;

@@ -2,7 +2,6 @@
 #define SYSTEMSTATEMACHINE_H
 
 #include <Command.h>
-#include <DataManager.h>
 #include <GiotData.h>
 #include <Log.h>
 #include <PowerMonitor.h>

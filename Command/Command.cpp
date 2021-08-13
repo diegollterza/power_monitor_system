@@ -45,6 +45,10 @@ bool Command::executeCommand() {
   } else if (str_command == "saveca") {
     str_ca = str_ca + str_parameters;
     LOG->I(TAG, "received line of ssl certificate: " + str_parameters);
+  } else if (str_command == "test") {
+    char teste[128];
+    dm->readData(0,128,teste);
+    LOG->I(TAG, String(teste));
   } else if (str_command == "commitca") {
     gdata->saveCa(str_ca);
     LOG->I(TAG, "saved google ssl certificate:\n" + str_ca);
@@ -65,7 +69,7 @@ bool Command::executeCommand() {
 
 Command* Command::instance = 0;
 
-Command* Command::getInstance(){
-  if(!instance) instance = new Command();
+Command* Command::getInstance() {
+  if (!instance) instance = new Command();
   return instance;
 }

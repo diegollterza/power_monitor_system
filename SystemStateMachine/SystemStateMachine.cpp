@@ -14,6 +14,7 @@ void SystemStateMachine::state() {
     case NOPOWER:
       break;
     case NOWIFI:
+      wifi->getDataFromEeprom();
       wifi->connect();
       break;
   }

@@ -1,13 +1,19 @@
 #include <Wifi.h>
 
 Wifi::Wifi() {
+  //wifidata here won't get correct data
   ssid = wifidata->getSavedSsid();
   password = wifidata->getSavedPassword();
   espClient = new WiFiClient();
-  this->max_try = 50;  // 5 seconds max try
+  this->max_try = 10;  // 1 seconds max try
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
   LOG->I(TAG, "Wifi initialized");
+}
+
+void Wifi::getDataFromEeprom(){
+  ssid = wifidata->getSavedSsid();
+  password = wifidata->getSavedPassword();
 }
 
 bool Wifi::connect() {

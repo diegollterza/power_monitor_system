@@ -7,6 +7,7 @@
 #include <Relay.h>
 #include <Wifi.h>
 #include <Wifidata.h>
+#include <DataManager.h>
 
 class Command {
  public:
@@ -27,6 +28,7 @@ class Command {
   static inline Relay *relay = Relay::getInstance();
   static inline GiotData *gdata = GiotData::getInstance();
   static Command *instance;
+  static inline DataManager *dm = DataManager::getInstance();
 };
 
 #endif

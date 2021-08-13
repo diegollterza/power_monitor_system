@@ -9,7 +9,7 @@ class DataManager {
  public:
   static DataManager *getInstance();
   void saveData(int offset, int max_size, char *data);
-  char *readData(int offset, int max_size);
+  void readData(int offset, int max_size, char *buffer);
 
  private:
   DataManager();

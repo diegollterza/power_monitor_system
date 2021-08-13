@@ -6,7 +6,6 @@
 #define DEBUG  // Can't define DEBUG on other libraries, need to define it here
 
 Log::Log() {
-  Serial.begin(115200);
   udp = new WiFiUDP();
   this->timeClient = new NTPClient(*udp, "pool.ntp.org", -10800);
   Serial.println(timeClient->getFormattedTime() + " I " + this->TAG + ": " +

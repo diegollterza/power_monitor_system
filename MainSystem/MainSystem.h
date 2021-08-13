@@ -1,6 +1,7 @@
 #ifndef MAINSYSTEM_H
 #define MAINSYSTEM_H
 
+#include <EEPROM.h>
 #include <SystemStateMachine.h>
 
 class MainSystem {

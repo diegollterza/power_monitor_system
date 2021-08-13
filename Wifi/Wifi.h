@@ -15,6 +15,7 @@ class Wifi {
   void setPassword(String password);
   bool isConnected();
   static Wifi *getInstance();
+  void getDataFromEeprom();
 
  private:
   Wifi();
