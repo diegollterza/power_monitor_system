@@ -15,13 +15,13 @@ class PowerMonitor {
 
  private:
   PowerMonitor();
-  int i_pin;
-  float f_resistor;
-  int i_voltage;
-  float f_current;
+  int pin;
+  float resistor;
+  int voltage;
+  float current;
   static const inline String TAG = "PowerMonitor";
   EnergyMonitor *monitor;
-  static inline Log *LOG = Log::getInstance();
+  static inline Log *log = Log::getInstance();
   static PowerMonitor *instance;
 };
 

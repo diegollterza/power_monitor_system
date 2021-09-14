@@ -16,7 +16,7 @@ class WifiData {
  private:
   WifiData();
   static const inline String TAG = "WifiData";
-  static inline Log *LOG = Log::getInstance();
+  static inline Log *log = Log::getInstance();
   static const inline int buffer_size = 128;  // fixed buffer size of 128 bytes
   static WifiData *instance;
   static inline DataManager *dm = DataManager::getInstance();

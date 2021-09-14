@@ -1,16 +1,19 @@
 #include <Wifidata.h>
 
-WifiData::WifiData() {}
+WifiData::WifiData() { log->I(TAG, "WifiData initialized"); }
 
 String WifiData::getSavedSsid() {
   char c_ssid[buffer_size];
   dm->readData(0, buffer_size, c_ssid);
+log->I(TAG, "Retrieved saved SSID: " + String(c_ssid));
   return String(c_ssid);
 }
 
 String WifiData::getSavedPassword() {
   char c_pass[buffer_size];
   dm->readData(buffer_size, buffer_size, c_pass);
+  log->I(TAG, "Retrieved saved password");
+  log->D(TAG, "Saved password: " + String(c_pass));
   return String(c_pass);
 }
 
@@ -18,12 +21,15 @@ void WifiData::saveSsid(String ssid) {
   char c_ssid[buffer_size];
   ssid.toCharArray(c_ssid, buffer_size);
   dm->saveData(0, buffer_size, c_ssid);
+  log->I(TAG, "Saved SSID: " + ssid);
 }
 
 void WifiData::savePassword(String password) {
   char c_pass[buffer_size];
   password.toCharArray(c_pass, buffer_size);
   dm->saveData(buffer_size, buffer_size, c_pass);
+  log->I(TAG, "Saved password");
+  log->I(TAG, "Password saved: " + password);
 }
 
 WifiData* WifiData::instance = 0;

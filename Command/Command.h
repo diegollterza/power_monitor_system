@@ -17,12 +17,12 @@ class Command {
  private:
   Command();
   bool executeCommand();
-  String str_command;
-  String str_parameters;
-  String str_ca;
+  String command;
+  String parameters;
+  String ca;
   static const inline String TAG = "Command";
-  int int_max_command_size;
-  static inline Log *LOG = Log::getInstance();
+  int max_command_size;
+  static inline Log *log = Log::getInstance();
   static inline Wifi *wifi = Wifi::getInstance();
   static inline WifiData *wifidata = WifiData::getInstance();
   static inline Relay *relay = Relay::getInstance();

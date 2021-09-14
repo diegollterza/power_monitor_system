@@ -3,25 +3,24 @@
 MainSystem::MainSystem() {
   internal_state = 0;
   wait_time = 2000;
-  LOG->I(TAG, "MainSystem initialized.");
+  log->I(TAG, "MainSystem initialized");
 }
 
 void MainSystem::start() {
   switch (internal_state) {
-    case IDLE:
+    case IDLE: //TODO
     case STOPPED:
-      LOG->I(TAG,
-             "Changed internal_state " + String(internal_state) + " to 1.");
+      log->I(TAG,
+             "Changed internal_state " + String(internal_state) + " to " + String(RUNNING));
       internal_state = RUNNING;
       run();
       break;
     case RUNNING:
-      LOG->E(TAG,
-             "Start called when system was running, stopping function call to "
-             "avoid unneeded recursion.");
+      log->E(TAG,
+             "Start called when system was already running");
       break;
     case PAUSED:
-      LOG->E(TAG, "System is paused, can't restart system.");
+      log->E(TAG, "System is paused, can't restart system.");
       break;
   }
 }
@@ -35,11 +34,11 @@ void MainSystem::run() {
 }
 
 void MainSystem::stop() {
-  // Don't need implementation yet
+  // TODO
 }
 
 void MainSystem::resume() {
-  // Don't need implementation yet
+  // TODO
 }
 
 MainSystem *MainSystem::instance = 0;

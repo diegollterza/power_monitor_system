@@ -15,7 +15,6 @@ class Wifi {
   void setPassword(String password);
   bool isConnected();
   static Wifi *getInstance();
-  void getDataFromEeprom();
 
  private:
   Wifi();
@@ -23,8 +22,9 @@ class Wifi {
   String ssid;
   String password;
   static const inline String TAG = "Wifi";
-  static inline Log *LOG = Log::getInstance();
+  static inline Log *log = Log::getInstance();
   static inline WifiData *wifidata = WifiData::getInstance();
+  void getDataFromEeprom();
   WiFiClient *espClient;
   int max_try;
 };

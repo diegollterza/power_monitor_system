@@ -23,7 +23,7 @@ class MainSystem {
 
   MainSystem();
   static MainSystem *instance;
-  static inline Log *LOG = Log::getInstance();
+  static inline Log *log = Log::getInstance();
   static inline SystemStateMachine *smm = SystemStateMachine::getInstance();
   static inline Command *command = Command::getInstance();
   int wait_time;  // time to sleep after each loop of the run

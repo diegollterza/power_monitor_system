@@ -14,7 +14,7 @@ class DataManager {
  private:
   DataManager();
   static const inline String TAG = "DataManager";
-  static inline Log *LOG = Log::getInstance();
+  static inline Log *log = Log::getInstance();
   static DataManager *instance;
 };
 

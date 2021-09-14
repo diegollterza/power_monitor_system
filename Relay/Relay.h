@@ -14,11 +14,11 @@ class Relay {
 
  private:
   Relay();
-  int int_pin;
+  int pin;
   static Relay *instance;
   static const inline String TAG = "Relay";
-  static inline Log *LOG = Log::getInstance();
-  bool b_is_on;
+  static inline Log *log = Log::getInstance();
+  bool is_on;
 };
 
 #endif

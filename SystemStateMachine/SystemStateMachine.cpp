@@ -2,49 +2,50 @@
 
 SystemStateMachine::SystemStateMachine() {
   restart();
+  log->I(TAG, "SystemStateMachine initialized");
 }
 
-void SystemStateMachine::state() {
-  switch (int_state) {
+void SystemStateMachine::setState() {
+  switch (state) {
     case INITIAL_STATE:
-      LOG->I(TAG, "State: INACTIVE->" + String(STATE_NAMES[int_state]));
+      log->I(TAG, "State: INACTIVE->" + String(STATE_NAMES[state]));
       break;
     case WORKING:
       break;
     case NOPOWER:
       break;
     case NOWIFI:
-      wifi->getDataFromEeprom();
       wifi->connect();
       break;
   }
-  if (int_old_state != int_state) {
-    LOG->I(TAG, "State: " + String(STATE_NAMES[int_old_state]) + "->" +
-                    String(STATE_NAMES[int_state]));
+  if (old_state != state) {
+    log->I(TAG, "State: " + String(STATE_NAMES[old_state]) + "->" +
+                    String(STATE_NAMES[state]));
   }
 }
 
 void SystemStateMachine::restart() {
-  b_isWifiOn = false;
-  b_isRelayOn = false;
-  b_isGcon = false;
-  int_state = 0;
-  int_old_state = 0;
+  isWifiOn = false;
+  isRelayOn = false;
+  isGcon = false;
+  state = 0;
+  old_state = 0;
 }
 
 void SystemStateMachine::nextState() {
   setInputs();
-  int_old_state = int_state;
-  int_state = WORKING;
-  // if(!b_isGcon) state = NOGCCONNECT;
-  if (!b_isRelayOn) int_state = NOPOWER;
-  if (!b_isWifiOn) int_state = NOWIFI;
-  state();
+  old_state = state;
+  state = WORKING;
+  // if(!isGcon) state = NOGCCONNECT;
+  if (!isRelayOn) state = NOPOWER;
+  if (!isWifiOn) state = NOWIFI;
+  setState();
 }
 
 void SystemStateMachine::setInputs() {
-  b_isWifiOn = wifi->isConnected();
-  b_isRelayOn = relay->isOn();
+   log->I(TAG, "Getting statemachine inputs");
+  isWifiOn = wifi->isConnected();
+  isRelayOn = relay->isOn();
 }
 
 SystemStateMachine *SystemStateMachine::instance = 0;

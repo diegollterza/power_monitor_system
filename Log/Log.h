@@ -1,5 +1,5 @@
-#ifndef LOG_H
-#define LOG_H
+#ifndef log_H
+#define log_H
 
 #include <NTPClient.h>
 #include <WiFiUdp.h>

@@ -1,70 +1,71 @@
 #include <Command.h>
 
 Command::Command() {
-  str_command = "";
-  str_parameters = "";
-  str_ca = "";
-  LOG->I(TAG, "Command initialized");
-  int_max_command_size = 128;
+  command = "";
+  parameters = "";
+  ca = "";
+  max_command_size = 128;
+  log->I(TAG, "Command initialized");
 }
 
 bool Command::readCommand() {
   if (!Serial.available()) return false;
-  String str_full_command = Serial.readString();
-  char c_com[int_max_command_size];
-  str_full_command.toCharArray(c_com, int_max_command_size);
-  str_command = strtok(c_com, ":");
-  str_parameters = strtok(NULL, ":");
+  log->I(TAG, "New command received");
+  String full_command = Serial.readString();
+  char com[max_command_size];
+  full_command.toCharArray(com, max_command_size);
+  command = strtok(com, ":");
+  parameters = strtok(NULL, ":");
   return executeCommand();
 }
 
 bool Command::executeCommand() {
-  bool b_success = true;
-  if (!str_command.length()) return false;
-  if (str_command == "connect") {
+  bool success = true;
+  if (!command.length()) return false;
+  if (command == "connect") {
     if (wifi->connect()) {
-      LOG->I(TAG, "connected to wifi by command");
+      log->I(TAG, "connected to wifi by command");
     } else {
-      LOG->E(TAG, "couldn't connect on wifi by command");
+      log->E(TAG, "couldn't connect on wifi by command");
     }
-  } else if (str_command == "disconnect") {
+  } else if (command == "disconnect") {
     wifi->disconnect();
-    LOG->I(TAG, "disconnected to wifi");
-  } else if (str_command == "setssid") {
-    wifi->setSsid(str_parameters);
-    LOG->I(TAG, "ssid changed");
-  } else if (str_command == "setpassword") {
-    wifi->setPassword(str_parameters);
-    LOG->I(TAG, "password changed");
-  } else if (str_command == "relayon") {
+    log->I(TAG, "disconnected to wifi");
+  } else if (command == "setssid") {
+    wifi->setSsid(parameters);
+    log->I(TAG, "ssid changed");
+  } else if (command == "setpassword") {
+    wifi->setPassword(parameters);
+    log->I(TAG, "password changed");
+  } else if (command == "relayon") {
     relay->turnOn();
-    LOG->I(TAG, "relay turned on");
-  } else if (str_command == "relayoff") {
+    log->I(TAG, "relay turned on");
+  } else if (command == "relayoff") {
     relay->turnOff();
-    LOG->I(TAG, "relay turned off");
-  } else if (str_command == "saveca") {
-    str_ca = str_ca + str_parameters;
-    LOG->I(TAG, "received line of ssl certificate: " + str_parameters);
-  } else if (str_command == "test") {
+    log->I(TAG, "relay turned off");
+  } else if (command == "saveca") {
+    ca = ca + parameters;
+    log->I(TAG, "received line of ssl certificate: " + parameters);
+  } else if (command == "test") {
     char teste[128];
     dm->readData(0,128,teste);
-    LOG->I(TAG, String(teste));
-  } else if (str_command == "commitca") {
-    gdata->saveCa(str_ca);
-    LOG->I(TAG, "saved google ssl certificate:\n" + str_ca);
+    log->I(TAG, String(teste));
+  } else if (command == "commitca") {
+    gdata->saveCa(ca);
+    log->I(TAG, "saved google ssl certificate:\n" + ca);
   } else {
-    b_success = false;
+    success = false;
   }
-  if (b_success) {
-    LOG->I(TAG, "Command " + str_command +
-                    " executed succesfully with parameters " + str_parameters);
+  if (success) {
+    log->I(TAG, "Command " + command +
+                    " executed succesfully with parameters " + parameters);
   } else {
-    LOG->I(TAG, "Command " + str_command + " failed with parameters " +
-                    str_parameters);
+    log->I(TAG, "Command " + command + " failed with parameters " +
+                    parameters);
   }
   // Reset the command strings (to avoid errors)
-  str_command = "";
-  str_parameters = "";
+  command = "";
+  parameters = "";
 }
 
 Command* Command::instance = 0;

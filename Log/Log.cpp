@@ -1,4 +1,4 @@
-#include "Log.h"
+#include "log.h"
 
 #include <Arduino.h>
 #include <NTPClient.h>
@@ -9,7 +9,7 @@ Log::Log() {
   udp = new WiFiUDP();
   this->timeClient = new NTPClient(*udp, "pool.ntp.org", -10800);
   Serial.println(timeClient->getFormattedTime() + " I " + this->TAG + ": " +
-                 "Log system initialized");
+                 "Log initialized");
 }
 
 void Log::E(String TAG, String logMessage) {
