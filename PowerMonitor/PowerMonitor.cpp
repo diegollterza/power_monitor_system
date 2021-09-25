@@ -7,7 +7,7 @@ PowerMonitor::PowerMonitor() {
   this->resistor = 680;
   monitor = new EnergyMonitor();
   monitor->current(pin, 2000 / resistor);
-   log->I(TAG, "PowerMonitor initialized");
+  log->I(TAG, "PowerMonitor initialized");
 }
 
 double PowerMonitor::readPower() {

@@ -2,7 +2,6 @@
 
 Command::Command() {
   command = "";
-  parameters = "";
   ca = "";
   max_command_size = 128;
   log->I(TAG, "Command initialized");
@@ -11,61 +10,35 @@ Command::Command() {
 bool Command::readCommand() {
   if (!Serial.available()) return false;
   log->I(TAG, "New command received");
-  String full_command = Serial.readString();
-  char com[max_command_size];
-  full_command.toCharArray(com, max_command_size);
-  command = strtok(com, ":");
-  parameters = strtok(NULL, ":");
-  return executeCommand();
+  if (parseCommand(Serial.readString())) {
+    command_container->executeCommand(command, parameters);
+  }
 }
 
-bool Command::executeCommand() {
-  bool success = true;
-  if (!command.length()) return false;
-  if (command == "connect") {
-    if (wifi->connect()) {
-      log->I(TAG, "connected to wifi by command");
-    } else {
-      log->E(TAG, "couldn't connect on wifi by command");
-    }
-  } else if (command == "disconnect") {
-    wifi->disconnect();
-    log->I(TAG, "disconnected to wifi");
-  } else if (command == "setssid") {
-    wifi->setSsid(parameters);
-    log->I(TAG, "ssid changed");
-  } else if (command == "setpassword") {
-    wifi->setPassword(parameters);
-    log->I(TAG, "password changed");
-  } else if (command == "relayon") {
-    relay->turnOn();
-    log->I(TAG, "relay turned on");
-  } else if (command == "relayoff") {
-    relay->turnOff();
-    log->I(TAG, "relay turned off");
-  } else if (command == "saveca") {
-    ca = ca + parameters;
-    log->I(TAG, "received line of ssl certificate: " + parameters);
-  } else if (command == "test") {
-    char teste[128];
-    dm->readData(0,128,teste);
-    log->I(TAG, String(teste));
-  } else if (command == "commitca") {
-    gdata->saveCa(ca);
-    log->I(TAG, "saved google ssl certificate:\n" + ca);
-  } else {
-    success = false;
+bool Command::parseCommand(String command) {
+  if (command == "") return false;
+  int len = command.length() + 1;
+  int i = 0;
+  char com[len];
+  command.toCharArray(com, len);
+  this->command = String(strtok(com, ":"));
+  this->command.trim();
+  memset(parameters, 0, sizeof(parameters));  // clear parameters list
+  char* param;
+  param = strtok(NULL, ":");
+
+  while (param != NULL) {
+    parameters[i] = String(param);
+    parameters[i].trim();
+    param = strtok(NULL, ":");
   }
-  if (success) {
-    log->I(TAG, "Command " + command +
-                    " executed succesfully with parameters " + parameters);
-  } else {
-    log->I(TAG, "Command " + command + " failed with parameters " +
-                    parameters);
+  log->I(TAG, "Command received: " + this->command);
+  String p = "";
+  for (int j = 0; j <= i; j++) {
+    p = p + parameters[i] + " ";
   }
-  // Reset the command strings (to avoid errors)
-  command = "";
-  parameters = "";
+  log->I(TAG, "Command parameters: " + p);
+  return true;
 }
 
 Command* Command::instance = 0;
