@@ -4,7 +4,6 @@ Command::Command() {
   command = "";
   ca = "";
   max_command_size = 128;
-  log->I(TAG, "Command initialized");
 }
 
 bool Command::readCommand() {
@@ -26,16 +25,16 @@ bool Command::parseCommand(String command) {
   memset(parameters, 0, sizeof(parameters));  // clear parameters list
   char* param;
   param = strtok(NULL, ":");
-
   while (param != NULL) {
     parameters[i] = String(param);
     parameters[i].trim();
     param = strtok(NULL, ":");
+    i++;
   }
   log->I(TAG, "Command received: " + this->command);
   String p = "";
   for (int j = 0; j <= i; j++) {
-    p = p + parameters[i] + " ";
+    p = p + parameters[j] + " ";
   }
   log->I(TAG, "Command parameters: " + p);
   return true;

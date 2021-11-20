@@ -8,8 +8,8 @@
 class DataManager {
  public:
   static DataManager *getInstance();
-  void saveData(int offset, int max_size, char *data);
-  void readData(int offset, int max_size, char *buffer);
+  void saveData(int offset, int max_size, String data);
+  String readData(int offset, int max_size);
 
  private:
   DataManager();

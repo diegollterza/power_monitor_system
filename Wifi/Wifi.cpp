@@ -1,17 +1,12 @@
 #include <Wifi.h>
 
 Wifi::Wifi() {
-  //wifidata here won't get correct data
-  ssid = wifidata->getSavedSsid();
-  password = wifidata->getSavedPassword();
   espClient = new WiFiClient();
-  this->max_try = 10;  // 1 seconds max try
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
-  log->I(TAG, "Wifi initialized");
 }
 
-void Wifi::getDataFromEeprom(){
+void Wifi::getDataFromEeprom() {
   log->I(TAG, "Retrieving data from EEPROM");
   ssid = wifidata->getSavedSsid();
   password = wifidata->getSavedPassword();
@@ -22,14 +17,16 @@ bool Wifi::connect() {
     log->I(TAG, "Wifi already connected, no action to be done");
   }
 
+  getDataFromEeprom();
+
   WiFi.begin(ssid, password);
-  int i = 0;
   log->I(TAG, "Trying to connect to SSID: " + ssid);
+  unsigned long time = millis();
+
   while (WiFi.status() != WL_CONNECTED) {
-    delay(100);
-    i++;
-    if (i == max_try) {
-      log->E(TAG, "Couldn't connect to SSID: " + ssid);
+    yield();
+    if (millis() - time > TIMEOUT) {
+      log->E(TAG, "Could not connect to wifi. Error code: " + String(WiFi.status()));
       return false;
     }
   }
@@ -45,7 +42,6 @@ void Wifi::disconnect() {
   log->I(TAG, "Disconnected from ssid:" + ssid);
   digitalWrite(LED_BUILTIN, HIGH);
 }
-
 
 bool Wifi::isConnected() {
   bool isConn = WiFi.isConnected();

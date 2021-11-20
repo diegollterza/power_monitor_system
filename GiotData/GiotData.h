@@ -14,12 +14,12 @@ class GiotData {
   void saveRegistryId(String registry_id);
   void saveDeviceId(String device_id);
   void savePrivateKey(String private_key);
-  void getSavedCa(char **ca);
-  void getSavedProjectId(char **project_id);
-  void getSavedLocation(char **location);
-  void getSavedRegistryId(char **registry_id);
-  void getSavedDeviceId(char **device_id);
-  void getSavedPrivateKey(char **private_key);
+  String getSavedCa();
+  String getSavedProjectId();
+  String getSavedLocation();
+  String getSavedRegistryId();
+  String getSavedDeviceId();
+  String getSavedPrivateKey();
 
  private:
   GiotData();

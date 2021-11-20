@@ -21,12 +21,13 @@ class MainSystem {
   static const inline int PAUSED = 2;
   static const inline int STOPPED = 3;
 
+  static const inline int TIMESTEP = 500;
+
   MainSystem();
   static MainSystem *instance;
   static inline Log *log = Log::getInstance();
   static inline SystemStateMachine *smm = SystemStateMachine::getInstance();
   static inline Command *command = Command::getInstance();
-  int wait_time;  // time to sleep after each loop of the run
   static const inline String TAG = "MainSystem";
 };
 

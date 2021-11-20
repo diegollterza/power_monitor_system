@@ -27,16 +27,16 @@ class Giot {
   void initializeDevice();
   static Giot *instance;
   static const inline String TAG = "Giot";
-  char *ca;
-  char *project_id;
-  char *location;
-  char *registry_id;
-  char *device_id;
-  char *private_key;
-  static const inline int int_ca_buffer_size =
+  static const inline int CA_BUFFER_SIZE =
       2048;  // maximum ssl certificate size
-  static const inline int int_project_info_buffer_size =
+  static const inline int BUFFER_SIZE =
       128;  // maximum project info size
+  char ca[CA_BUFFER_SIZE];
+  char project_id[BUFFER_SIZE];
+  char location[BUFFER_SIZE];
+  char registry_id[BUFFER_SIZE];
+  char device_id[BUFFER_SIZE];
+  char private_key[BUFFER_SIZE];
   static inline Log *log = Log::getInstance();
   static inline GiotData *giotdata = GiotData::getInstance();
   MQTTClient *mqttClient;

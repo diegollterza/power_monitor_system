@@ -2,8 +2,6 @@
 
 MainSystem::MainSystem() {
   internal_state = 0;
-  wait_time = 2000;
-  log->I(TAG, "MainSystem initialized");
 }
 
 void MainSystem::start() {
@@ -26,10 +24,12 @@ void MainSystem::start() {
 }
 
 void MainSystem::run() {
+  unsigned long int time;
   while (internal_state == RUNNING) {
+    time = millis();
     smm->nextState();
     command->readCommand();
-    delay(wait_time);
+    while(millis() - time < TIMESTEP);
   }
 }
 

@@ -1,9 +1,6 @@
 #include <SystemStateMachine.h>
 
-SystemStateMachine::SystemStateMachine() {
-  restart();
-  log->I(TAG, "SystemStateMachine initialized");
-}
+SystemStateMachine::SystemStateMachine() { restart(); }
 
 void SystemStateMachine::setState() {
   switch (state) {
@@ -43,7 +40,7 @@ void SystemStateMachine::nextState() {
 }
 
 void SystemStateMachine::setInputs() {
-   log->I(TAG, "Getting statemachine inputs");
+  log->I(TAG, "Getting statemachine inputs");
   isWifiOn = wifi->isConnected();
   isRelayOn = relay->isOn();
 }

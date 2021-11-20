@@ -3,36 +3,34 @@
 #include <EEPROM.h>
 #include <log.h>
 
-DataManager::DataManager() { log->I(TAG, "DataManager initialized"); }
+DataManager::DataManager() {}
 
-void DataManager::saveData(int offset, int max_size, char *data) {
-  EEPROM.begin(10 * 1024);
+void DataManager::saveData(int offset, int max_size, String data) {
   int i = 0;
-  while (i < max_size) {
+  while (i < max_size && i < data.length()) {
     EEPROM.write(offset + i, data[i]);
     i++;
   }
-  EEPROM.write(offset + i + 1, '\0');
+  EEPROM.write(offset + i, '\0');
   EEPROM.commit();
   log->D(TAG, "Saved data in EEPROM at position " + String(offset) +
                   " with max size of " + String(max_size));
   log->D(TAG, "Data saved: " + String(data));
-  EEPROM.end();
 }
 
-void DataManager::readData(int offset, int max_size, char *buffer) {
-  EEPROM.begin(10 * 1024);
+String DataManager::readData(int offset, int max_size) {
   int i = 0;
   char c = 'a';
+  String buffer;
   while (i < max_size && c != '\0') {
     c = EEPROM.read(offset + i);
-    buffer[i] = c;
+    buffer += char(c);
     i++;
   }
   log->D(TAG, "Read data in EEPROM at position " + String(offset) +
                   " with max size of " + String(max_size) +
-                  " data read: " + String(buffer));
-  EEPROM.end();
+                  " data read: " + buffer);
+  return buffer;
 }
 
 DataManager *DataManager::instance = 0;

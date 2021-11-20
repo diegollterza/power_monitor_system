@@ -62,9 +62,15 @@ bool CommandContainer::wifiCommand(String parameters[]) {
     wifi->disconnect();
     log->I(TAG, "disconnected to wifi");
     return true;
+  } else if (parameters[0] == "setssid") {
+    wifi->setSsid(parameters[1]);
+  } else if (parameters[0] == "setpassword") {
+    wifi->setPassword(parameters[1]);
+  } else {
+    log->E(TAG, "Wrong wifi command parameters");
+    return false;
   }
-  log->E(TAG, "Wrong wifi command parameters");
-  return false;
+  return true;
 }
 
 CommandContainer* CommandContainer::instance = 0;

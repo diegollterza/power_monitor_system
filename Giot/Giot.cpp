@@ -9,17 +9,16 @@ Giot::Giot() {
   mqtt = new CloudIoTCoreMqtt(mqttClient, &netClient, device);
   mqtt->setUseLts(true);
   mqtt->startMQTTAdvanced();  // Opens connection using advanced callback
-  log->I(TAG, "Initialized Giot");
 }
 
 void Giot::getDataFromEeprom() {
-  log->I(TAG, "Retrieving data from EEPROM");
-  giotdata->getSavedCa(&ca);
-  giotdata->getSavedProjectId(&project_id);
-  giotdata->getSavedLocation(&location);
-  giotdata->getSavedRegistryId(&registry_id);
-  giotdata->getSavedDeviceId(&device_id);
-  giotdata->getSavedPrivateKey(&private_key);
+/*   log->I(TAG, "Retrieving data from EEPROM");
+  giotdata->getSavedCa();
+  giotdata->getSavedProjectId();
+  giotdata->getSavedLocation();
+  giotdata->getSavedRegistryId();
+  giotdata->getSavedDeviceId();
+  giotdata->getSavedPrivateKey(); */
 }
 
 void Giot::setCa(String ca) {

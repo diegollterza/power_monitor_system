@@ -8,8 +8,6 @@
 Log::Log() {
   udp = new WiFiUDP();
   this->timeClient = new NTPClient(*udp, "pool.ntp.org", -10800);
-  Serial.println(timeClient->getFormattedTime() + " I " + this->TAG + ": " +
-                 "Log initialized");
 }
 
 void Log::E(String TAG, String logMessage) {
