@@ -12,6 +12,7 @@ class PowerMonitor {
   void setPin(int pin);
   void setVoltage(int voltage);
   void setResistor(float resistor);
+  void calibrate(double real_current, double delta, double accept_percentage);
 
  private:
   PowerMonitor();
@@ -19,6 +20,7 @@ class PowerMonitor {
   float resistor;
   int voltage;
   float current;
+  int turns;
   static const inline String TAG = "PowerMonitor";
   EnergyMonitor *monitor;
   static inline Log *log = Log::getInstance();
