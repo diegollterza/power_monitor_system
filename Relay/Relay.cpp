@@ -2,9 +2,9 @@
 
 Relay::Relay() {
   pinMode(0, OUTPUT);
-  digitalWrite(0, LOW);
+  digitalWrite(0, HIGH);
   pin = 0;
-  is_on = false;
+  is_on = true;
 }
 
 void Relay::setPin(int pin) {

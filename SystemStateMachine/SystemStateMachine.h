@@ -3,10 +3,10 @@
 
 #include <Command.h>
 #include <Giot.h>
+#include <Log.h>
 #include <PowerMonitor.h>
 #include <Relay.h>
 #include <Wifi.h>
-#include <Log.h>
 
 class SystemStateMachine {
  public:
@@ -37,10 +37,12 @@ class SystemStateMachine {
   static const inline int NOGCCONNECT = 3;
   static const inline int NOPOWER = 4;
   static const inline int WORKING = 5;
+  static const inline int NOGIOT = 6;
 
-  static const inline char *STATE_NAMES[] = {"INITIAL_STATE", "NOWIFI",
-                                             "NOINTERNET",    "NOGCCONNECT",
-                                             "NOPOWER",       "WORKING"};
+  static const inline char *STATE_NAMES[] = {
+      "INITIAL_STATE", "NOWIFI",  "NOINTERNET", "NOGCCONNECT",
+      "NOPOWER",       "WORKING", "NOGIOT"};
+
   /* Transition state */;
   void setState();
 

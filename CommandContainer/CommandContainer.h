@@ -18,7 +18,11 @@ class CommandContainer {
   bool setMethodPointer(String);
   void registerCommand(String command,
                        bool((CommandContainer::*mptr)(String[])));
+
+
   bool wifiCommand(String parameters[]);
+  bool relayCommand(String parameters[]);
+  
   String command_list[128];
   bool((CommandContainer::*ptr_list[128])(String[]));
   int pointer_index;

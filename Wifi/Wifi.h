@@ -19,13 +19,11 @@ class Wifi {
  private:
   Wifi();
   static Wifi *instance;
-  String ssid;
-  String password;
   int TIMEOUT = 15000;
   static const inline String TAG = "Wifi";
   static inline Log *log = Log::getInstance();
   static inline WifiData *wifidata = WifiData::getInstance();
-  void getDataFromEeprom();
+  void configureWebTime();
   WiFiClient *espClient;
 };
 

@@ -7,7 +7,7 @@
 #include <GiotData.h>
 #include <Log.h>
 #include <MQTT.h>
-// #include <time.h>
+#include <Wifi.h>
 
 #include "WiFiClientSecureBearSSL.h"
 
@@ -20,25 +20,22 @@ class Giot {
   void setRegistryId(String registry_id);
   void setDeviceId(String device_id);
   void setPrimaryKey(String primary_key);
+  bool publishTelemetry(String data);
+  bool isConnected();
+  void connect();
+  String getJwt();
 
  private:
   Giot();
-  void getDataFromEeprom();
   void initializeDevice();
+  void setupCloudIoT();
+  void setStaticProject();
   static Giot *instance;
+  static const inline int jwt_exp_secs = 3600;
   static const inline String TAG = "Giot";
-  static const inline int CA_BUFFER_SIZE =
-      2048;  // maximum ssl certificate size
-  static const inline int BUFFER_SIZE =
-      128;  // maximum project info size
-  char ca[CA_BUFFER_SIZE];
-  char project_id[BUFFER_SIZE];
-  char location[BUFFER_SIZE];
-  char registry_id[BUFFER_SIZE];
-  char device_id[BUFFER_SIZE];
-  char private_key[BUFFER_SIZE];
   static inline Log *log = Log::getInstance();
   static inline GiotData *giotdata = GiotData::getInstance();
+  static inline Wifi *wifi = Wifi::getInstance();
   MQTTClient *mqttClient;
   BearSSL::WiFiClientSecure netClient;
   BearSSL::X509List certList;

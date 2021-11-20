@@ -8,11 +8,15 @@ void SystemStateMachine::setState() {
       log->I(TAG, "State: INACTIVE->" + String(STATE_NAMES[state]));
       break;
     case WORKING:
+      giot->publishTelemetry(String(power_monitor->readPower()));
       break;
     case NOPOWER:
       break;
     case NOWIFI:
       wifi->connect();
+      break;
+    case NOGIOT:
+      giot->connect();
       break;
   }
   if (old_state != state) {
@@ -33,7 +37,7 @@ void SystemStateMachine::nextState() {
   setInputs();
   old_state = state;
   state = WORKING;
-  // if(!isGcon) state = NOGCCONNECT;
+  if (!isGcon) state = NOGIOT;
   if (!isRelayOn) state = NOPOWER;
   if (!isWifiOn) state = NOWIFI;
   setState();
@@ -43,6 +47,7 @@ void SystemStateMachine::setInputs() {
   log->I(TAG, "Getting statemachine inputs");
   isWifiOn = wifi->isConnected();
   isRelayOn = relay->isOn();
+  isGcon = giot->isConnected();
 }
 
 SystemStateMachine *SystemStateMachine::instance = 0;

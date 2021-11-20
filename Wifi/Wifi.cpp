@@ -6,19 +6,13 @@ Wifi::Wifi() {
   digitalWrite(LED_BUILTIN, HIGH);
 }
 
-void Wifi::getDataFromEeprom() {
-  log->I(TAG, "Retrieving data from EEPROM");
-  ssid = wifidata->getSavedSsid();
-  password = wifidata->getSavedPassword();
-}
-
 bool Wifi::connect() {
   if (WiFi.status() == WL_CONNECTED) {
     log->I(TAG, "Wifi already connected, no action to be done");
   }
 
-  getDataFromEeprom();
-
+  String ssid = wifidata->getSavedSsid();
+  String password = wifidata->getSavedPassword();
   WiFi.begin(ssid, password);
   log->I(TAG, "Trying to connect to SSID: " + ssid);
   unsigned long time = millis();
@@ -26,7 +20,8 @@ bool Wifi::connect() {
   while (WiFi.status() != WL_CONNECTED) {
     yield();
     if (millis() - time > TIMEOUT) {
-      log->E(TAG, "Could not connect to wifi. Error code: " + String(WiFi.status()));
+      log->E(TAG,
+             "Could not connect to wifi. Error code: " + String(WiFi.status()));
       return false;
     }
   }
@@ -34,12 +29,19 @@ bool Wifi::connect() {
   log->I(TAG, "Connection info: IP=" + WiFi.localIP().toString() +
                   " rssi=" + WiFi.RSSI());
   digitalWrite(LED_BUILTIN, LOW);
+  configureWebTime();
   return true;
+}
+
+void Wifi::configureWebTime() {
+  log->I(TAG, "Synchronizing time with internet.");
+  configTime(0, 0, "pool.ntp.org", "time.nist.gov");
+  while (time(nullptr) < 1510644967) delay(100);
 }
 
 void Wifi::disconnect() {
   WiFi.disconnect();
-  log->I(TAG, "Disconnected from ssid:" + ssid);
+  log->I(TAG, "Disconnected from wifi");
   digitalWrite(LED_BUILTIN, HIGH);
 }
 
@@ -50,15 +52,11 @@ bool Wifi::isConnected() {
 }
 
 void Wifi::setSsid(String ssid) {
-  String old_ssid = this->ssid;
-  this->ssid = ssid;
   log->I(TAG, "Set ssid:" + ssid);
   wifidata->saveSsid(ssid);
 }
 
 void Wifi::setPassword(String password) {
-  this->password = password;
-  log->I(TAG, "Set password");
   log->D(TAG, "Password set to " + password);
   wifidata->savePassword(password);
 }

@@ -21,7 +21,7 @@ class MainSystem {
   static const inline int PAUSED = 2;
   static const inline int STOPPED = 3;
 
-  static const inline int TIMESTEP = 500;
+  static const inline int TIMESTEP = 1000;
 
   MainSystem();
   static MainSystem *instance;

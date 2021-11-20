@@ -1,9 +1,6 @@
 #ifndef log_H
 #define log_H
 
-#include <NTPClient.h>
-#include <WiFiUdp.h>
-
 #include "Arduino.h"
 #include "debug.h"
 
@@ -16,9 +13,8 @@ class Log {
 
  private:
   Log();
+  String getCurrentTime();
   static Log *instance;
-  NTPClient *timeClient;
-  WiFiUDP *udp;
   static const inline String TAG = "Log";
 };
 

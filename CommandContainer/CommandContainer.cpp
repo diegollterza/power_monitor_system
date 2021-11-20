@@ -7,6 +7,7 @@
 
 CommandContainer::CommandContainer() {
   registerCommand("Wifi", &CommandContainer::wifiCommand);
+  registerCommand("Relay", &CommandContainer::relayCommand);
 }
 
 /*
@@ -61,13 +62,26 @@ bool CommandContainer::wifiCommand(String parameters[]) {
   } else if (parameters[0] == "disconnect") {
     wifi->disconnect();
     log->I(TAG, "disconnected to wifi");
-    return true;
   } else if (parameters[0] == "setssid") {
     wifi->setSsid(parameters[1]);
   } else if (parameters[0] == "setpassword") {
     wifi->setPassword(parameters[1]);
   } else {
     log->E(TAG, "Wrong wifi command parameters");
+    return false;
+  }
+  return true;
+}
+
+bool CommandContainer::relayCommand(String parameters[]) {
+  if (parameters[0] == "turnon") {
+    relay->turnOn();
+    log->I(TAG, "Turned relay on.");
+  } else if (parameters[0] == "turnoff") {
+    relay->turnOff();
+    log->I(TAG, "Turned relay off.");
+  } else {
+    log->E(TAG, "Wrong relay command parameters");
     return false;
   }
   return true;
