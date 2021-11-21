@@ -19,7 +19,7 @@ class Wifi {
  private:
   Wifi();
   static Wifi *instance;
-  int TIMEOUT = 15000;
+  int TIMEOUT = 10000;
   static const inline String TAG = "Wifi";
   static inline Log *log = Log::getInstance();
   static inline WifiData *wifidata = WifiData::getInstance();

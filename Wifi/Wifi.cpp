@@ -18,7 +18,7 @@ bool Wifi::connect() {
   unsigned long time = millis();
 
   while (WiFi.status() != WL_CONNECTED) {
-    yield();
+    delay(100);
     if (millis() - time > TIMEOUT) {
       log->E(TAG,
              "Could not connect to wifi. Error code: " + String(WiFi.status()));

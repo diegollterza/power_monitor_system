@@ -14,7 +14,7 @@ void Giot::setupCloudIoT() {
       0x41, 0x3a, 0x57, 0x3a, 0xc1, 0xd2, 0xf6, 0xa0, 0x48, 0x14};
 
   // Certificates for SSL on the LTS server
-  const char* ca =
+  const char* primary_ca =
       "-----BEGIN CERTIFICATE-----\n"
       "MIIBxTCCAWugAwIBAgINAfD3nVndblD3QnNxUDAKBggqhkjOPQQDAjBEMQswCQYD\n"
       "VQQGEwJVUzEiMCAGA1UEChMZR29vZ2xlIFRydXN0IFNlcnZpY2VzIExMQzERMA8G\n"
@@ -28,9 +28,25 @@ void Giot::setupCloudIoT() {
       "miGgpajjf/gFigGM34F9021bCWs1MbL0SA==\n"
       "-----END CERTIFICATE-----\n";
 
+  const char* backup_ca =
+      "-----BEGIN CERTIFICATE-----\n"
+      "MIIB4TCCAYegAwIBAgIRKjikHJYKBN5CsiilC+g0mAIwCgYIKoZIzj0EAwIwUDEk\n"
+      "MCIGA1UECxMbR2xvYmFsU2lnbiBFQ0MgUm9vdCBDQSAtIFI0MRMwEQYDVQQKEwpH\n"
+      "bG9iYWxTaWduMRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTEyMTExMzAwMDAwMFoX\n"
+      "DTM4MDExOTAzMTQwN1owUDEkMCIGA1UECxMbR2xvYmFsU2lnbiBFQ0MgUm9vdCBD\n"
+      "QSAtIFI0MRMwEQYDVQQKEwpHbG9iYWxTaWduMRMwEQYDVQQDEwpHbG9iYWxTaWdu\n"
+      "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEuMZ5049sJQ6fLjkZHAOkrprlOQcJ\n"
+      "FspjsbmG+IpXwVfOQvpzofdlQv8ewQCybnMO/8ch5RikqtlxP6jUuc6MHaNCMEAw\n"
+      "DgYDVR0PAQH/BAQDAgEGMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFFSwe61F\n"
+      "uOJAf/sKbvu+M8k8o4TVMAoGCCqGSM49BAMCA0gAMEUCIQDckqGgE6bPA7DmxCGX\n"
+      "kPoUVy0D7O48027KqGx2vKLeuwIgJ6iFJzWbVsaj8kfSt24bAgAXqmemFZHe+pTs\n"
+      "ewv4n4Q=\n"
+      "-----END CERTIFICATE-----\n";
+
   device = new CloudIoTCoreDevice(project_id, location, registry_id, device_id);
 
-  certList.append(ca);
+  certList.append(primary_ca);
+  certList.append(backup_ca);
   // certList.append(backup_ca);
   netClient.setTrustAnchors(&certList);
 
@@ -44,6 +60,7 @@ void Giot::setupCloudIoT() {
 }
 
 bool Giot::publishTelemetry(String data) {
+  log->I(TAG, "Publishing message: " + data);
   return mqtt->publishTelemetry(data);
 }
 
@@ -62,7 +79,7 @@ String Giot::getJwt() {
   // Disable software watchdog as these operations can take a while.
   ESP.wdtDisable();
   time_t iat = time(nullptr);
-  Serial.println("Refreshing JWT");
+  log->I(TAG, "Refreshing JWT");
   String jwt = device->createJWT(iat, jwt_exp_secs);
   ESP.wdtEnable(0);
   return jwt;
@@ -71,6 +88,11 @@ String Giot::getJwt() {
 void Giot::connect() {
   if (!mqtt->loop()) {
     mqtt->mqttConnect();
+  }
+  if (isConnected()) {
+    log->I(TAG, "Successful connected to Google Cloud IoT");
+  } else {
+    log->I(TAG, "Failed to connect to Google Cloud IoT");
   }
 }
 

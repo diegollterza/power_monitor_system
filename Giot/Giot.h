@@ -31,7 +31,7 @@ class Giot {
   void setupCloudIoT();
   void setStaticProject();
   static Giot *instance;
-  static const inline int jwt_exp_secs = 3600;
+  static const inline int jwt_exp_secs = 24*3600;
   static const inline String TAG = "Giot";
   static inline Log *log = Log::getInstance();
   static inline GiotData *giotdata = GiotData::getInstance();
