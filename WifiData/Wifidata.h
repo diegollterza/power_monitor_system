@@ -1,25 +1,25 @@
 #ifndef WIFIDATA_H
 #define WIFIDATA_H
 
-#include <EEPROM.h>
-
-#include "Arduino.h"
-#include "Log.h"
+#include <Arduino.h>
+#include <DataManager.h>
+#include <Log.h>
 
 class WifiData {
  public:
-  WifiData(Log *LOG);
+  static WifiData *getInstance();
   String getSavedSsid();
   String getSavedPassword();
   void saveSsid(String ssid);
   void savePassword(String password);
 
  private:
-  String ssid;
-  String password;
+  WifiData();
   static const inline String TAG = "WifiData";
-  Log *LOG;
+  static inline Log *log = Log::getInstance();
   static const inline int buffer_size = 128;  // fixed buffer size of 128 bytes
+  static WifiData *instance;
+  static inline DataManager *dm = DataManager::getInstance();
 };
 
 #endif

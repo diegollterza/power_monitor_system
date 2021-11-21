@@ -1,72 +1,34 @@
-#include "Wifidata.h"
+#include <Wifidata.h>
 
-#include <EEPROM.h>
-
-#include "Arduino.h"
-#include "Log.h"
-
-WifiData::WifiData(Log *LOG) {
-  EEPROM.begin(2 * buffer_size);
-  char ssid_ch[buffer_size];
-  char pass_ch[buffer_size];
-  for (int i = 0; i < buffer_size; i++) {
-    ssid_ch[i] = EEPROM.read(i);
-    pass_ch[i] = EEPROM.read(i + buffer_size);
-  }
-  this->ssid = String(ssid_ch);
-  this->password = String(pass_ch);
-  this->LOG = LOG;
-  EEPROM.end();
-}
+WifiData::WifiData() { log->I(TAG, "WifiData initialized"); }
 
 String WifiData::getSavedSsid() {
-  EEPROM.begin(2 * buffer_size);
-  char ssid_ch[buffer_size];
-  int i = 0;
-  while (i <= buffer_size) {
-    ssid_ch[i] = EEPROM.read(i);
-    i++;
-  }
-  this->ssid = String(ssid_ch);
-  LOG->I(TAG, "Retrieving saved ssid: " + this->ssid);
-  EEPROM.end();
-  return this->ssid;
+  String ssid = dm->readData(0, buffer_size);
+  log->I(TAG, "Retrieved saved SSID: " + ssid);
+  return ssid;
 }
 
 String WifiData::getSavedPassword() {
-  EEPROM.begin(2 * buffer_size);
-  char pass_ch[buffer_size];
-  int i = 0;
-  while (i <= buffer_size) {
-    pass_ch[i] = EEPROM.read(i + buffer_size);
-    i++;
-  }
-  this->password = String(pass_ch);
-  LOG->I(TAG, "Retrieving saved password.");
-  EEPROM.end();
-  return this->password;
+  String password = dm->readData(buffer_size, buffer_size);
+  log->I(TAG, "Retrieved saved password");
+  log->D(TAG, "Saved password: " + password);
+  return password;
 }
 
 void WifiData::saveSsid(String ssid) {
-  EEPROM.begin(2 * buffer_size);
-  this->ssid = ssid;
-  for (int i = 0; i <= this->ssid.length(); i++) {
-    EEPROM.write(i, this->ssid[i]);
-    EEPROM.commit();
-    if (i == buffer_size) break;
-  }
-  LOG->I(TAG, "Saving new ssid: " + ssid);
-  EEPROM.end();
+  dm->saveData(0, buffer_size, ssid);
+  log->I(TAG, "Saved SSID: " + ssid);
 }
 
 void WifiData::savePassword(String password) {
-  EEPROM.begin(2 * buffer_size);
-  this->password = password;
-  for (int i = 0; i <= this->password.length(); i++) {
-    EEPROM.write(i + buffer_size, this->password[i]);
-    EEPROM.commit();
-    if (i == buffer_size) break;
-  }
-  LOG->I(TAG, "Saving new password.");
-  EEPROM.end();
+  dm->saveData(buffer_size, buffer_size, password);
+  log->I(TAG, "Saved password");
+  log->I(TAG, "Password saved: " + password);
+}
+
+WifiData* WifiData::instance = 0;
+
+WifiData* WifiData::getInstance() {
+  if (!instance) instance = new WifiData();
+  return instance;
 }

@@ -2,29 +2,32 @@
 #define COMMAND_H
 
 #include <Arduino.h>
+#include <DataManager.h>
+#include <GiotData.h>
 #include <Log.h>
 #include <Relay.h>
 #include <Wifi.h>
 #include <Wifidata.h>
-#include <GiotData.h>
+#include <CommandContainer.h>
 
 class Command {
  public:
-  Command(GiotData *gdata, Relay *relay, Wifi *wifi, WifiData *wifidata, Log *LOG);
+  static Command *getInstance();
   bool readCommand();
 
  private:
-  bool executeCommand();
-  String str_command;
-  String str_parameters;
-  String str_ca;
+  Command();
+  bool parseCommand(String command);
+  void executeCommand();
+  String command;
+  String parameters[10]; // max number of parameters set to 10
+  String ca;
   static const inline String TAG = "Command";
-  int int_max_command_size;
-  Log *LOG;
-  Wifi *wifi;
-  WifiData *wifidata;
-  Relay *relay;
-  GiotData *gdata;
+  int max_command_size;
+  static inline Log *log = Log::getInstance();
+  static inline CommandContainer *command_container = CommandContainer::getInstance();
+  static Command *instance;
+  static inline DataManager *dm = DataManager::getInstance();
 };
 
 #endif

@@ -1,31 +1,30 @@
 #ifndef WIFI_H
 #define WIFI_H
 
+#include <Arduino.h>
 #include <ESP8266WiFi.h>
+#include <Log.h>
 #include <WiFiUdp.h>
-
-#include "Arduino.h"
-#include "Log.h"
+#include <Wifidata.h>
 
 class Wifi {
  public:
-  Wifi(WiFiClient *espClient, Log *LOG);
-  Wifi(String ssid, String password, int max_try, WiFiClient *espClient,
-       Log *LOG);
   bool connect();
   void disconnect();
-  void setNetworkParameters(String ssid, String password);
   void setSsid(String ssid);
   void setPassword(String password);
   bool isConnected();
+  static Wifi *getInstance();
 
  private:
-  String ssid;
-  String password;
+  Wifi();
+  static Wifi *instance;
+  int TIMEOUT = 10000;
   static const inline String TAG = "Wifi";
-  Log *LOG;
+  static inline Log *log = Log::getInstance();
+  static inline WifiData *wifidata = WifiData::getInstance();
+  void configureWebTime();
   WiFiClient *espClient;
-  int max_try;
 };
 
 #endif

@@ -1,35 +1,41 @@
 #include <Arduino.h>
 #include <DataManager.h>
 #include <EEPROM.h>
-#include <Log.h>
+#include <log.h>
 
-DataManager::DataManager(Log *LOG) {
-  this->LOG = LOG;
-  LOG->I(TAG, "DataManager initialized");
+DataManager::DataManager() {}
+
+void DataManager::saveData(int offset, int max_size, String data) {
+  int i = 0;
+  while (i < max_size && i < data.length()) {
+    EEPROM.write(offset + i, data[i]);
+    i++;
+  }
+  EEPROM.write(offset + i, '\0');
+  EEPROM.commit();
+  log->D(TAG, "Saved data in EEPROM at position " + String(offset) +
+                  " with max size of " + String(max_size));
+  log->D(TAG, "Data saved: " + String(data));
 }
 
-void DataManager::saveData(int offset, int max_size, char *data) {
-  EEPROM.begin(offset + max_size);
+String DataManager::readData(int offset, int max_size) {
   int i = 0;
-  while (i < max_size) {
-    EEPROM.write(offset + max_size, data[i]);
+  char c = 'a';
+  String buffer;
+  while (i < max_size && c != '\0') {
+    c = EEPROM.read(offset + i);
+    buffer += char(c);
+    i++;
   }
-  EEPROM.end();
-  LOG->I(TAG, "Saved data in EEPROM at position " + String(offset) +
-                 "with max size of " + String(max_size) +
-                 "data saved:" + String(data));
+  log->D(TAG, "Read data in EEPROM at position " + String(offset) +
+                  " with max size of " + String(max_size) +
+                  " data read: " + buffer);
+  return buffer;
 }
 
-char *DataManager::readData(int offset, int max_size) {
-  EEPROM.begin(offset + max_size);
-  int i = 0;
-  char c_data[max_size];
-  while (i < max_size) {
-    c_data[i] = EEPROM.read(offset + i);
-  }
-  EEPROM.end();
-  LOG->I(TAG, "Read data in EEPROM at position " + String(offset) +
-                 "with max size of " + String(max_size) +
-                 "data read: " + String(c_data));
-  return c_data;
+DataManager *DataManager::instance = 0;
+
+DataManager *DataManager::getInstance() {
+  if (!instance) instance = new DataManager();
+  return instance;
 }

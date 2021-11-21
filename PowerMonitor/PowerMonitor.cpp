@@ -1,32 +1,59 @@
-#include <Arduino.h>
-#include <EmonLib.h>
-#include <Log.h>
 #include <PowerMonitor.h>
 
-PowerMonitor::PowerMonitor(Log *LOG, EnergyMonitor *monitor) {
-  pin = A0;
-  a_voltage = 110;
-  out_current = 0.050;
+PowerMonitor::PowerMonitor() {
+  this->pin = A0;
+  this->voltage = 110;
   this->resistor = 680;
-  this->LOG = LOG;
-  this->monitor = monitor;
-  monitor->current(pin, 2000 / resistor);
-}
-
-PowerMonitor::PowerMonitor(int pin, int resistor, int a_voltage,
-                           int out_current, Log *LOG, EnergyMonitor *monitor) {
-  this->pin = pin;
-  this->resistor = resistor;
-  this->a_voltage = a_voltage;
-  this->out_current = out_current;
-  this->LOG = LOG;
-  this->monitor = monitor;
-  monitor->current(pin, 2000 / resistor);
+  this->turns = 2000;
+  monitor = new EnergyMonitor();
+  monitor->current(pin, turns / resistor);
 }
 
 double PowerMonitor::readPower() {
   double Irms = monitor->calcIrms(1480);
-  double power = Irms*a_voltage;
-  LOG->I(TAG, "Reading Irms value: " + String(Irms) + "A" + " Power = " + String(power) + "W");
+  double power = Irms * voltage;
+  log->I(TAG, "Reading Irms value: " + String(Irms) + "A" +
+                  " Power = " + String(power) + "W");
   return power;
+}
+
+void PowerMonitor::setPin(int pin) {
+  this->pin = pin;
+  log->I(TAG, "Pin set to " + String(pin));
+}
+
+void PowerMonitor::setVoltage(int voltage) {
+  this->voltage = voltage;
+  log->I(TAG, "Voltage set to " + String(voltage));
+}
+
+void PowerMonitor::setResistor(float resistor) {
+  this->resistor = resistor;
+  log->I(TAG, "Resistor set to " + String(resistor));
+}
+
+void PowerMonitor::calibrate(double real_current, double delta,
+                             double accept_percentage) {
+  double calibration = turns / resistor;
+  double current_diff = real_current - monitor->calcIrms(1480);
+  double previous_current_diff = 0;
+  while (abs(current_diff) > (accept_percentage * real_current)) {
+    current_diff = real_current - monitor->calcIrms(1480);
+    if (current_diff > 0) {
+      if (previous_current_diff < 0) delta /= 2;
+      calibration -= delta;
+      monitor->current(pin, calibration);
+    } else {
+      if (previous_current_diff > 0) delta /= 2;
+      calibration += delta;
+      monitor->current(pin, calibration);
+    }
+  }
+}
+
+PowerMonitor* PowerMonitor::instance = 0;
+
+PowerMonitor* PowerMonitor::getInstance() {
+  if (!instance) instance = new PowerMonitor();
+  return instance;
 }

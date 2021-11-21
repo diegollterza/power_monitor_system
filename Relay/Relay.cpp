@@ -1,37 +1,39 @@
-#include "Relay.h"
+#include <Relay.h>
 
-#include "Arduino.h"
-#include "Log.h"
-
-Relay::Relay(Log *LOG) {
+Relay::Relay() {
   pinMode(0, OUTPUT);
-  digitalWrite(0, LOW);
-  this->pin = 0;
-  this->LOG = LOG;
-  this->is_on = false;
+  digitalWrite(0, HIGH);
+  pin = 0;
+  is_on = true;
 }
 
-Relay::Relay(int pin, Log *LOG) {
-  pinMode(pin, OUTPUT);
-  digitalWrite(pin, LOW);
+void Relay::setPin(int pin) {
+  log->I(TAG, "Relay pin set to " + String(pin));
   this->pin = pin;
-  this->LOG = LOG;
-  this->is_on = false;
 }
 
 void Relay::turnOn() {
   digitalWrite(pin, HIGH);
   is_on = true;
-  LOG->I(TAG, "Relay turned on");
+  log->I(TAG, "Relay turned on");
 }
 
 void Relay::turnOff() {
   is_on = false;
   digitalWrite(pin, LOW);
-  LOG->I(TAG, "Relay turned off");
+  log->I(TAG, "Relay turned off");
 }
 
 bool Relay::isOn() {
-  LOG->I(TAG, "Is on: " + String(is_on));
+  log->I(TAG, "Is on: " + String(is_on));
   return is_on;
+}
+
+Relay* Relay::instance = 0;
+
+Relay* Relay::getInstance() {
+  if (instance == 0) {
+    instance = new Relay();
+  }
+  return instance;
 }

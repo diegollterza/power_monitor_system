@@ -7,13 +7,15 @@
 
 class DataManager {
  public:
-  DataManager(Log *LOG);
-  void saveData(int offset, int max_size, char *data);
-  char *readData(int offset, int max_size);
+  static DataManager *getInstance();
+  void saveData(int offset, int max_size, String data);
+  String readData(int offset, int max_size);
 
  private:
+  DataManager();
   static const inline String TAG = "DataManager";
-  Log *LOG;
+  static inline Log *log = Log::getInstance();
+  static DataManager *instance;
 };
 
 #endif

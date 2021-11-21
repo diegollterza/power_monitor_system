@@ -7,18 +7,23 @@
 
 class PowerMonitor {
  public:
-  PowerMonitor(Log *LOG, EnergyMonitor *monitor);
-  PowerMonitor(int pin, int resistor, int a_voltage, int out_current, Log *LOG, EnergyMonitor *monitor);
+  static PowerMonitor *getInstance();
   double readPower();
+  void setPin(int pin);
+  void setVoltage(int voltage);
+  void setResistor(float resistor);
+  void calibrate(double real_current, double delta, double accept_percentage);
 
  private:
+  PowerMonitor();
   int pin;
   float resistor;
-  int a_voltage;
-  float out_current;
+  int voltage;
+  int turns;
   static const inline String TAG = "PowerMonitor";
-  Log *LOG;
   EnergyMonitor *monitor;
+  static inline Log *log = Log::getInstance();
+  static PowerMonitor *instance;
 };
 
 #endif
