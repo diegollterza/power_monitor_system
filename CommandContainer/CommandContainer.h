@@ -23,8 +23,8 @@ class CommandContainer {
   bool wifiCommand(String parameters[]);
   bool relayCommand(String parameters[]);
   
-  String command_list[128];
-  bool((CommandContainer::*ptr_list[128])(String[]));
+  String command_list[64];
+  bool((CommandContainer::*ptr_list[64])(String[]));
   int pointer_index;
   static const inline String TAG = "CommandContainer";
   static inline Log *log = Log::getInstance();
