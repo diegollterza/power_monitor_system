@@ -3,7 +3,6 @@
 PowerMonitor::PowerMonitor() {
   this->pin = A0;
   this->voltage = 110;
-  this->current = 0.050;
   this->resistor = 680;
   this->turns = 2000;
   monitor = new EnergyMonitor();

@@ -19,7 +19,6 @@ class PowerMonitor {
   int pin;
   float resistor;
   int voltage;
-  float current;
   int turns;
   static const inline String TAG = "PowerMonitor";
   EnergyMonitor *monitor;
