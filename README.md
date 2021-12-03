@@ -11,7 +11,7 @@ To configure the system, open the file `Configuration.h` at the folder `x` folde
 ## Dependencies
 * Emonlib
 * MqttClient
-* [CloudIoTCore](https://github.comGoogleCloudPlatform/google-cloud-iot-arduino) (Depends of lwMQTT)
+* [CloudIoTCore](https://github.com/GoogleCloudPlatform/google-cloud-iot-arduino) (Depends of lwMQTT)
 ## Hardware
 * Esp8266 based development boards (NodeMCU)
 * Non-Invasive current sensor
